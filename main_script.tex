@@ -1,0 +1,556 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={R and C++ Integration},
+            pdfauthor={Abdou Seck},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{R and C++ Integration}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Abdou Seck}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{11/3/2017}
+
+
+\begin{document}
+\maketitle
+
+\subsubsection{The R API}\label{the-r-api}
+
+The R programming language offers an API to programmers through a set of
+header files that ship with every R installation.
+
+Essentially everything inside R is represented as a \texttt{SEXP} object
+or \texttt{S-expression} in C++. By permitting exchange of such objects
+between it and C++, R provides programmers with the ability to operate
+directly on R objects.
+
+There are two main functions that facilitate communication between C/C++
+and R: \texttt{.C} and \texttt{.Call}. The former first appeared in an
+earlier version of the R language and only supports pointers to basic C
+types. The latter provides a richer interface and can operate directly
+on \texttt{SEXP} objects.
+
+The following are the main variants of \texttt{SEXP} objects:
+
+\texttt{REALSXP}: numeric vector
+
+\texttt{INTSXP}: integer vector
+
+\texttt{LGLSXP}: logical vector
+
+\texttt{STRSXP}: character vector
+
+\texttt{VECSXP}: list
+
+\texttt{CLOSXP}: function (closure)
+
+\texttt{ENVSXP}: environment
+
+\newpage
+
+\subsubsection{Compiling and Linking}\label{compiling-and-linking}
+
+You can manually compile your C++ code and link the resulting output to
+your session. But it's easier to use the multitude of R packages that
+make this process overly simple. Such packages include \texttt{inline}
+and \texttt{Rcpp}. Both \texttt{inline} and \texttt{Rcpp} make it
+extremely easy to compile and link C code to your current R session. We
+will be using \texttt{Rcpp}.
+
+\newpage
+
+\subsubsection{Example}\label{example}
+
+The following is a C++ function that can be called directly in R after
+compilation and linking.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// In C/C++ ----------------------------------------}
+\PreprocessorTok{#include }\ImportTok{<R.h>}
+\PreprocessorTok{#include }\ImportTok{<Rinternals.h>}
+
+\NormalTok{SEXP add(SEXP a, SEXP b) \{}
+\NormalTok{  SEXP result = PROTECT(allocVector(REALSXP, }\DecValTok{1}\NormalTok{));}
+\NormalTok{  REAL(result)[}\DecValTok{0}\NormalTok{] = asReal(a) + asReal(b);}
+\NormalTok{  UNPROTECT(}\DecValTok{1}\NormalTok{);}
+
+  \ControlFlowTok{return}\NormalTok{ result;}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The R code calling our function
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# In R ----------------------------------------}
+\NormalTok{add <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(a, b) \{}
+  \KeywordTok{.Call}\NormalTok{(}\StringTok{"add"}\NormalTok{, a, b)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{Background}\label{background}
+
+I mainly work with R when it comes to modeling, but any modeling task is
+made possible by the heavy lifting of data wrangling. Often though,
+wrangling can be too much of a task for R to deal with; especially when
+there needs to be some scope conscious looping. By this, I mean any loop
+wherein we have to worry about previous values. As a result, such
+operations just cannot be easily \textbf{\emph{vectorized}}. This is a
+situation when I feel that I need a \emph{lower} level and much more
+perfomant language to do such tasks.
+
+\newpage
+
+\subsubsection{Sourcing the files}\label{sourcing-the-files}
+
+Calling \texttt{source} allows R to run the R code inside the provided
+file and save the result in the current namespace.
+\texttt{Rcpp::sourceCpp} makes it easy to compile C++ code and link the
+exported functions to the current R session.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{'main_script.R'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The script \texttt{main\_script.R} above contains the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lapply}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Rcpp"}\NormalTok{, }\StringTok{"RcppArmadillo"}\NormalTok{, }\StringTok{"microbenchmark"}\NormalTok{, }\StringTok{"inline"}\NormalTok{, ), }\ControlFlowTok{function}\NormalTok{(pkg) \{}
+  \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(pkg, }\DataTypeTok{character.only =}\NormalTok{ T)) \{}
+    \KeywordTok{install.packages}\NormalTok{(pkg)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \KeywordTok{sprintf}\NormalTok{(}\StringTok{"Package %s is already installed and loaded."}\NormalTok{, pkg)}
+\NormalTok{  \}}
+\NormalTok{\})}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'~/Documents/Personal/Data_Analysis/R/RCpp_Integration/'}\NormalTok{)}
+\CommentTok{# Get the R functions}
+\KeywordTok{source}\NormalTok{(}\StringTok{'recursive_fib.R'}\NormalTok{)}
+\KeywordTok{source}\NormalTok{(}\StringTok{'cached_fib.R'}\NormalTok{)}
+\CommentTok{# Get the cpp functions}
+\KeywordTok{sourceCpp}\NormalTok{(}\StringTok{'recursive_fib.cpp'}\NormalTok{)}
+\KeywordTok{sourceCpp}\NormalTok{(}\StringTok{'cached_fib.cpp'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{Naive recursive implementation of Fibonacci
+series}\label{naive-recursive-implementation-of-fibonacci-series}
+
+\subsubsection{R}\label{r}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fibR <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n) \{}
+  \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{fibR}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{fibR}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{C++}\label{c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// [[Rcpp::export]]}
+\DataTypeTok{int}\NormalTok{ fibCpp(}\AttributeTok{const} \DataTypeTok{int}\NormalTok{ n) \{}
+  \ControlFlowTok{if}\NormalTok{ (n == }\DecValTok{0}\NormalTok{) }\ControlFlowTok{return} \DecValTok{0}\NormalTok{;}
+  \ControlFlowTok{if}\NormalTok{ (n == }\DecValTok{1}\NormalTok{) }\ControlFlowTok{return} \DecValTok{1}\NormalTok{;}
+  \ControlFlowTok{return}\NormalTok{ fibCpp(n - }\DecValTok{1}\NormalTok{) + fibCpp(n - }\DecValTok{2}\NormalTok{);}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Benchmarking}\label{benchmarking}
+
+\begin{verbatim}
+## Unit: microseconds
+##        expr      min        lq       mean   median        uq       max
+##    fibR(20) 7229.109 7786.0680 8481.31845 8153.650 9032.1840 15127.795
+##  fibCpp(20)   46.681   47.6775   57.90319   55.309   58.9835  1035.562
+##  neval
+##    500
+##    500
+\end{verbatim}
+
+\includegraphics{main_script_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\newpage
+
+\subsubsection{Cached recursive implementation of Fibonacci
+series}\label{cached-recursive-implementation-of-fibonacci-series}
+
+\subsubsection{R}\label{r-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cached_fibR <-}\StringTok{ }\KeywordTok{local}\NormalTok{(\{}
+\NormalTok{  cache <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{1000}\NormalTok{))}
+\NormalTok{  f <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(n) \{}
+    \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{<}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\OtherTok{NA}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{>}\StringTok{ }\KeywordTok{length}\NormalTok{(cache)) }\KeywordTok{stop}\NormalTok{(}\StringTok{"Cannot process for n greater than 1000."}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(cache[n])) }\KeywordTok{return}\NormalTok{(cache[n])}
+\NormalTok{    ans <-}\StringTok{ }\KeywordTok{f}\NormalTok{(n }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{f}\NormalTok{(n }\OperatorTok{-}\StringTok{ }\DecValTok{2}\NormalTok{)}
+\NormalTok{    cache[n] <<-}\StringTok{ }\NormalTok{ans}
+\NormalTok{    ans}
+\NormalTok{  \}}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{C++}\label{c-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{#include }\ImportTok{<Rcpp.h>}
+\PreprocessorTok{#include }\ImportTok{<algorithm>}
+\PreprocessorTok{#include }\ImportTok{<vector>}
+\PreprocessorTok{#include }\ImportTok{<stdexcept>}
+\PreprocessorTok{#include }\ImportTok{<cmath>}
+\PreprocessorTok{#include }\ImportTok{<iostream>}
+\KeywordTok{using} \KeywordTok{namespace}\NormalTok{ Rcpp;}
+
+\KeywordTok{class}\NormalTok{ Fib \{}
+  \KeywordTok{public}\NormalTok{:}
+\NormalTok{    Fib(}\DataTypeTok{unsigned} \DataTypeTok{int}\NormalTok{ n = }\DecValTok{1000}\NormalTok{) \{}
+\NormalTok{      cache.resize(n);}
+      \BuiltInTok{std::}\NormalTok{fill(cache.begin(), cache.end(), NAN);}
+\NormalTok{      cache[}\DecValTok{0}\NormalTok{] = }\FloatTok{0.0}\NormalTok{;}
+\NormalTok{      cache[}\DecValTok{1}\NormalTok{] = }\FloatTok{1.0}\NormalTok{;}
+\NormalTok{    \}}
+    \DataTypeTok{double}\NormalTok{ cached_fibCpp(}\DataTypeTok{int}\NormalTok{ x) \{}
+      \ControlFlowTok{if}\NormalTok{ (x < }\DecValTok{0}\NormalTok{) \{}
+        \ControlFlowTok{return}\NormalTok{ (}\DataTypeTok{double}\NormalTok{) NAN;}
+\NormalTok{      \}}
+      \ControlFlowTok{if}\NormalTok{ (x >= (}\DataTypeTok{int}\NormalTok{) cache.size()) \{}
+        \ControlFlowTok{throw} \BuiltInTok{std::}\NormalTok{range_error(}\StringTok{"x too large for implementation"}\NormalTok{);}
+\NormalTok{      \}}
+      \ControlFlowTok{if}\NormalTok{ (x < }\DecValTok{2}\NormalTok{) \{}
+        \ControlFlowTok{return}\NormalTok{ x;}
+\NormalTok{      \}}
+      \ControlFlowTok{if}\NormalTok{ (! ::isnan(cache[x])) }\ControlFlowTok{return}\NormalTok{ cache[x];}
+\NormalTok{      cache[x] = cached_fibCpp(x - }\DecValTok{1}\NormalTok{) + cached_fibCpp(x - }\DecValTok{2}\NormalTok{);}
+      \ControlFlowTok{return}\NormalTok{ cache[x];}
+      
+\NormalTok{    \}}
+  \KeywordTok{private}\NormalTok{:}
+    \BuiltInTok{std::}\NormalTok{vector<}\DataTypeTok{double}\NormalTok{> cache;}
+\NormalTok{\};}
+
+\NormalTok{Fib f = Fib(}\DecValTok{2000}\NormalTok{);}
+
+\CommentTok{// [[Rcpp::export]]}
+\DataTypeTok{double}\NormalTok{ cached_fibCpp(}\AttributeTok{const} \DataTypeTok{int}\NormalTok{ a) \{}
+  \ControlFlowTok{return}\NormalTok{ f.cached_fibCpp(a);}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{Benchmarking}\label{benchmarking-1}
+
+\begin{verbatim}
+## Unit: microseconds
+##                expr   min     lq     mean median     uq      max neval
+##    cached_fibR(500) 1.382 1.4970 4.389010  1.558 1.6610 2613.308  1000
+##  cached_fibCpp(500) 0.715 0.8725 2.056097  0.960 1.1115  803.504  1000
+\end{verbatim}
+
+\includegraphics{main_script_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\newpage
+
+\subsubsection{Iterative implementation of Fibonacci
+series}\label{iterative-implementation-of-fibonacci-series}
+
+\subsubsection{R}\label{r-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iter_fibR <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+  \ControlFlowTok{if}\NormalTok{ (x }\OperatorTok{<}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{return}\NormalTok{(}\OtherTok{NA}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (x }\OperatorTok{<}\StringTok{ }\DecValTok{2}\NormalTok{) }\KeywordTok{return}\NormalTok{(x)}
+\NormalTok{  first <-}\StringTok{ }\DecValTok{0}
+\NormalTok{  second <-}\StringTok{ }\DecValTok{1}
+\NormalTok{  third <-}\StringTok{ }\DecValTok{0}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{seq_len}\NormalTok{(x)) \{}
+\NormalTok{    third <-}\StringTok{ }\NormalTok{first }\OperatorTok{+}\StringTok{ }\NormalTok{second}
+\NormalTok{    first <-}\StringTok{ }\NormalTok{second}
+\NormalTok{    second <-}\StringTok{ }\NormalTok{third}
+\NormalTok{  \}}
+\NormalTok{  first}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{C++}\label{c-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{#include }\ImportTok{<Rcpp.h>}
+\PreprocessorTok{#include }\ImportTok{<cmath>}
+\KeywordTok{using} \KeywordTok{namespace}\NormalTok{ Rcpp;}
+
+\CommentTok{// [[Rcpp::export]]}
+\DataTypeTok{double}\NormalTok{ iter_fibCpp(}\AttributeTok{const} \DataTypeTok{int}\NormalTok{ x) \{}
+  \ControlFlowTok{if}\NormalTok{ (x < }\DecValTok{0}\NormalTok{) }\ControlFlowTok{return}\NormalTok{ NAN;}
+  \ControlFlowTok{if}\NormalTok{ (x < }\DecValTok{2}\NormalTok{) }\ControlFlowTok{return}\NormalTok{ x;}
+  \DataTypeTok{double}\NormalTok{ first = }\FloatTok{0.0}\NormalTok{;}
+  \DataTypeTok{double}\NormalTok{ second = }\FloatTok{1.0}\NormalTok{;}
+  \DataTypeTok{double}\NormalTok{ third = }\FloatTok{0.0}\NormalTok{;}
+  \ControlFlowTok{for}\NormalTok{ (}\DataTypeTok{int}\NormalTok{ i = }\DecValTok{0}\NormalTok{; i < x; i++) \{}
+\NormalTok{    third = first + second;}
+\NormalTok{    first = second;}
+\NormalTok{    second = third;}
+\NormalTok{  \}}
+  \ControlFlowTok{return}\NormalTok{ first;}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{Benchmarking}\label{benchmarking-2}
+
+\begin{verbatim}
+## Unit: microseconds
+##              expr    min      lq      mean  median     uq      max neval
+##    iter_fibR(500) 29.268 31.4385 39.808805 32.6430 34.058 4862.766  1000
+##  iter_fibCpp(500)  1.121  1.3725  2.844399  1.5305  1.755 1123.231  1000
+\end{verbatim}
+
+\includegraphics{main_script_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\newpage
+
+\subsubsection{Vector Autogression
+Model}\label{vector-autogression-model}
+
+A VAR is used to capture linear independencies among multiple time
+series. In sum, it describes the evolution of a set of endogenous
+variables over the same sample period \((t = 1, ..., T)\) as a linear
+function of only their past values.
+
+Considering the simplest case of a two-dimensional VAR of order one, we
+can use the following notation:
+
+\[Ax_{t-1} + u_t\]
+
+At time \(t\) , the model is comprised of two endogenous variables
+\(x_t = (x_{1t} , x_{2t})\) which are a function of their previous
+values at \(t - 1\) via the coefficient matrix \(A\). When studying the
+properties of VAR systems, simulation is a tool that is frequently used
+to assess these models. And, for the simulations, we need to generate
+suitable data. Due to the interdependence between the two coefficients
+in the equation above, we can see that vectorization is not going to be
+possible. Therefore, we will need to loop explicitly.
+
+\subsubsection{R}\label{r-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.1}\NormalTok{, }\FloatTok{0.1}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{)}
+\NormalTok{u <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10000}\NormalTok{), }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{Rsim <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(coeff, errors) \{}
+\NormalTok{  simdata <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(errors), }\KeywordTok{ncol}\NormalTok{(errors))}
+  \ControlFlowTok{for}\NormalTok{ (row }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(errors)) \{}
+\NormalTok{    simdata[row, ] =}\StringTok{ }\NormalTok{coeff }\OperatorTok{%*%}\StringTok{ }\NormalTok{simdata[(row}\OperatorTok{-}\DecValTok{1}\NormalTok{),] }\OperatorTok{+}\StringTok{ }\NormalTok{errors[row, ]}
+\NormalTok{  \}}
+\NormalTok{  simdata}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{C++}\label{c-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(Rcpp)}
+\KeywordTok{library}\NormalTok{(RcppArmadillo)}
+\KeywordTok{suppressMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(inline))}
+
+\NormalTok{code <-}\StringTok{ '}
+\StringTok{  arma::mat coeff = Rcpp::as<arma::mat>(a);}
+\StringTok{  arma::mat errors = Rcpp::as<arma::mat>(u);}
+\StringTok{  int m = errors.n_rows;}
+\StringTok{  int n = errors.n_cols;}
+\StringTok{  arma::mat simdata(m,n);}
+\StringTok{  simdata.row(0) = arma::zeros<arma::mat>(1,n);}
+\StringTok{  for (int row=1; row<m; row++) \{}
+\StringTok{    simdata.row(row) = simdata.row(row-1) * trans(coeff) + errors.row(row);}
+\StringTok{  \}}
+\StringTok{  return Rcpp::wrap(simdata);}
+\StringTok{'}
+\NormalTok{Cppsim <-}\StringTok{ }\KeywordTok{cxxfunction}\NormalTok{(}\KeywordTok{signature}\NormalTok{(}\DataTypeTok{a=}\StringTok{"numeric"}\NormalTok{, }\DataTypeTok{u=}\StringTok{"numeric"}\NormalTok{), code, }\DataTypeTok{plugin=}\StringTok{"RcppArmadillo"}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\subsubsection{Benchmarking}\label{benchmarking-3}
+
+\begin{verbatim}
+## Unit: microseconds
+##          expr      min        lq      mean    median        uq       max
+##    Rsim(A, u) 6945.951 7488.2425 8542.6906 7968.2435 8920.4275 85507.243
+##  Cppsim(A, u)  206.612  222.2035  252.8797  232.3385  249.8865  1044.693
+##  neval
+##   1000
+##   1000
+\end{verbatim}
+
+\includegraphics{main_script_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\newpage
+
+\subsubsection{Summary}\label{summary}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Compile and link using either \texttt{inline} or \texttt{Rcpp} or
+  both. You may use \texttt{R\ CMD\ SHLIB} to create a shared object,
+  but you would need to load the shared object into \texttt{R} yourself.
+\item
+  Don't try to use \texttt{C++} for things that are easily vectorized in
+  R.
+\end{enumerate}
+
+\newpage
+
+\begin{center}
+\LARGE
+Thank You.
+\end{center}
+
+
+\end{document}
